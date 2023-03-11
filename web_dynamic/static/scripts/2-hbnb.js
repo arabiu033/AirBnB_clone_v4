@@ -1,20 +1,20 @@
-$('document').ready(function () {
-  const url = 'http://' + window.location.hostname + ':5001/api/v1/status/';
-  $.get(url, function (res) {
-    if (res.status === 'OK') {
-      $('#api_status').addClass('available');
-    } else {
-      $('#api_status').removeClass('available');
-    }
-  });
+document.ready(function () {
+	const amenities = {};
+	$("li input[type=checkbox]").change(function () {
+		if (this.checked) {
+			amenities[this.dataset.name] = this.dataset.id;
+		} else {
+			delete amenities[this.dataset.name];
+		}
+		$(".amenities h4").text(Object.keys(amenities).sort().join(", "));
+	});
 
-  const amenities = {};
-  $('INPUT[type="checkbox"]').change(function () {
-    if ($(this).is(':checked')) {
-      amenities[$(this).attr('data-id')] = $(this).attr('data-name');
-    } else {
-      delete amenities[$(this).attr('data-id')];
-    }
-    $('.amenities H4').text(Object.values(amenities).join(', '));
-  });
+	// get status of API
+	$.getJSON("http://0.0.0.0:5001/api/v1/status/", (data) => {
+		if (data.status === "OK") {
+			$("div#api_status").addClass("available");
+		} else {
+			$("div#api_status").removeClass("available");
+		}
+	});
 });
